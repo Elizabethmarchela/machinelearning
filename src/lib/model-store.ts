@@ -2,13 +2,11 @@ import fs from "node:fs";
 import path from "node:path";
 import { createClassifier, type ModelFile } from "./sentiment";
 
-// Hanya dipakai di server (API route & server component). File hasil python ml/train.py.
 const MODEL_DIR = path.join(process.cwd(), "model");
 
 type Classifier = ReturnType<typeof createClassifier>;
 let cache: { mtime: number; clf: Classifier } | null = null;
 
-/** Memuat model.json; otomatis dimuat ulang bila file berubah (setelah training ulang). */
 export function getClassifier(): Classifier | null {
   const file = path.join(MODEL_DIR, "model.json");
   try {

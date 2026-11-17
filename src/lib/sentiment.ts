@@ -1,14 +1,3 @@
-/**
- * Inferensi sentimen di sisi JavaScript.
- * Mereplikasi persis pipeline scikit-learn dari ml/train.py:
- *   cleanText  ->  TF-IDF (n-gram, sublinear tf, L2 norm)  ->  skor linear  ->  softmax
- * Semua model terbaik (MNB / Linear SVM / Logistic Regression) berbentuk
- *   skor_c = bias_c + sum_j x_j * W[c][j]
- * sehingga satu implementasi cukup untuk ketiganya.
- *
- * File ini sengaja tidak punya import apa pun agar bisa dipakai di server maupun client.
- */
-
 export interface ModelFile {
   version: number;
   model_key: "mnb" | "svm" | "lr";
@@ -18,7 +7,7 @@ export interface ModelFile {
   sublinear_tf: boolean;
   vocabulary: Record<string, number>;
   idf: number[];
-  weights: number[][]; // [kelas][fitur]
+  weights: number[][];
   bias: number[];
   probability_mode: "posterior" | "approximate";
   stopwords: string[];
@@ -47,7 +36,6 @@ export function createClassifier(model: ModelFile) {
   const K = model.labels.length;
   const V = model.idf.length;
 
-  // rata-rata bobot antar kelas per fitur (untuk penjelasan kontribusi kata)
   const meanW = new Float64Array(V);
   for (let j = 0; j < V; j++) {
     let s = 0;
@@ -55,7 +43,6 @@ export function createClassifier(model: ModelFile) {
     meanW[j] = s / K;
   }
 
-  /** Harus identik dengan clean_text() di ml/train.py */
   function cleanText(text: string): string {
     let t = text.toLowerCase();
     t = t.replace(/https?:\/\/\S+|www\.\S+/g, " ");
@@ -74,7 +61,6 @@ export function createClassifier(model: ModelFile) {
     const cleaned = cleanText(text);
     const toks = cleaned.match(/\b[a-z]{2,}\b/g) ?? [];
 
-    // term frequency atas n-gram yang ada di vocabulary
     const counts = new Map<number, number>();
     for (let n = nMin; n <= Math.min(nMax, toks.length); n++) {
       for (let i = 0; i + n <= toks.length; i++) {
@@ -83,7 +69,6 @@ export function createClassifier(model: ModelFile) {
       }
     }
 
-    // TF-IDF + normalisasi L2
     const x: [number, number][] = [];
     let norm = 0;
     for (const [j, c] of counts) {
@@ -95,18 +80,15 @@ export function createClassifier(model: ModelFile) {
     norm = Math.sqrt(norm);
     if (norm > 0) for (const e of x) e[1] /= norm;
 
-    // skor linear tiap kelas
     const raw = model.bias.slice();
     for (let k = 0; k < K; k++) for (const [j, v] of x) raw[k] += v * model.weights[k][j];
 
-    // softmax stabil
     const mx = Math.max(...raw);
     const ex = raw.map((s) => Math.exp(s - mx));
     const sum = ex.reduce((a, b) => a + b, 0);
     const probs = ex.map((e) => e / sum);
     const best = probs.indexOf(Math.max(...probs));
 
-    // kata yang paling mendorong prediksi (kontribusi relatif terhadap rata-rata kelas)
     const topTerms = x
       .map(([j, v]) => ({ term: terms[j], contribution: v * (model.weights[best][j] - meanW[j]) }))
       .filter((t) => Math.abs(t.contribution) > 1e-9)
