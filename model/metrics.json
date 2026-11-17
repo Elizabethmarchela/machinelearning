@@ -1,0 +1,348 @@
+{
+  "settings": {
+    "seed": 42,
+    "test_size": 0.2,
+    "cv_folds": 5,
+    "scoring": "f1_macro"
+  },
+  "dataset": {
+    "source": "https://raw.githubusercontent.com/IndoNLP/indonlu/master/dataset/smsa_doc-sentiment-prosa/test_preprocess.tsv",
+    "total": 500,
+    "train": 400,
+    "test": 100,
+    "class_distribution": {
+      "negative": 204,
+      "neutral": 88,
+      "positive": 208
+    },
+    "avg_tokens_raw": 24.9,
+    "avg_tokens_clean": 16.5
+  },
+  "preprocessing_example": {
+    "raw": "kemarin gue datang ke tempat makan baru yang ada di dago atas . gue kira makanan nya enak karena harga nya mahal . ternyata , boro-boro . tidak mau lagi deh ke tempat itu . sudah mana tempat nya juga tidak nyaman banget , terlalu sempit .",
+    "clean": "kemarin datang tempat makan baru dago atas kira makanan enak harga mahal ternyata boro boro tidak mau tempat mana tempat tidak nyaman banget terlalu sempit"
+  },
+  "labels": [
+    "negative",
+    "neutral",
+    "positive"
+  ],
+  "models": [
+    {
+      "key": "mnb",
+      "name": "Multinomial Naive Bayes",
+      "best_params": {
+        "alpha": 0.1,
+        "min_df": 1,
+        "ngram_range": [
+          1,
+          2
+        ],
+        "sublinear_tf": true
+      },
+      "cv_f1_macro": 0.7205983592652186,
+      "cv_f1_std": 0.061294352182728475,
+      "test": {
+        "accuracy": 0.78,
+        "precision_macro": 0.8469090351280871,
+        "recall_macro": 0.6964769647696477,
+        "f1_macro": 0.711555094274347,
+        "f1_weighted": 0.7602127659574468
+      },
+      "per_class": {
+        "negative": {
+          "precision": 0.8048780487804879,
+          "recall": 0.8048780487804879,
+          "f1": 0.8048780487804879,
+          "support": 41
+        },
+        "neutral": {
+          "precision": 1.0,
+          "recall": 0.3333333333333333,
+          "f1": 0.5,
+          "support": 18
+        },
+        "positive": {
+          "precision": 0.7358490566037735,
+          "recall": 0.9512195121951219,
+          "f1": 0.8297872340425532,
+          "support": 41
+        }
+      },
+      "confusion_matrix": [
+        [
+          33,
+          0,
+          8
+        ],
+        [
+          6,
+          6,
+          6
+        ],
+        [
+          2,
+          0,
+          39
+        ]
+      ],
+      "fit_seconds": 1.73,
+      "predict_ms_per_doc": 0.0135
+    },
+    {
+      "key": "svm",
+      "name": "Linear SVM",
+      "best_params": {
+        "C": 1,
+        "class_weight": "balanced",
+        "min_df": 1,
+        "ngram_range": [
+          1,
+          1
+        ],
+        "sublinear_tf": true
+      },
+      "cv_f1_macro": 0.7605266131160164,
+      "cv_f1_std": 0.05215201706438711,
+      "test": {
+        "accuracy": 0.85,
+        "precision_macro": 0.8127798127798127,
+        "recall_macro": 0.7845528455284553,
+        "f1_macro": 0.7927825329826432,
+        "f1_weighted": 0.841574128471877
+      },
+      "per_class": {
+        "negative": {
+          "precision": 0.8571428571428571,
+          "recall": 0.8780487804878049,
+          "f1": 0.8674698795180723,
+          "support": 41
+        },
+        "neutral": {
+          "precision": 0.6923076923076923,
+          "recall": 0.5,
+          "f1": 0.5806451612903226,
+          "support": 18
+        },
+        "positive": {
+          "precision": 0.8888888888888888,
+          "recall": 0.975609756097561,
+          "f1": 0.9302325581395349,
+          "support": 41
+        }
+      },
+      "confusion_matrix": [
+        [
+          36,
+          3,
+          2
+        ],
+        [
+          6,
+          9,
+          3
+        ],
+        [
+          0,
+          1,
+          40
+        ]
+      ],
+      "fit_seconds": 0.92,
+      "predict_ms_per_doc": 0.0082
+    },
+    {
+      "key": "lr",
+      "name": "Logistic Regression",
+      "best_params": {
+        "C": 30,
+        "class_weight": "balanced",
+        "min_df": 1,
+        "ngram_range": [
+          1,
+          1
+        ],
+        "sublinear_tf": false
+      },
+      "cv_f1_macro": 0.7627970045705809,
+      "cv_f1_std": 0.05727615717676992,
+      "test": {
+        "accuracy": 0.82,
+        "precision_macro": 0.7828282828282829,
+        "recall_macro": 0.7497741644083108,
+        "f1_macro": 0.7581699346405228,
+        "f1_weighted": 0.8098823529411766
+      },
+      "per_class": {
+        "negative": {
+          "precision": 0.8181818181818182,
+          "recall": 0.8780487804878049,
+          "f1": 0.8470588235294118,
+          "support": 41
+        },
+        "neutral": {
+          "precision": 0.6666666666666666,
+          "recall": 0.4444444444444444,
+          "f1": 0.5333333333333333,
+          "support": 18
+        },
+        "positive": {
+          "precision": 0.8636363636363636,
+          "recall": 0.926829268292683,
+          "f1": 0.8941176470588236,
+          "support": 41
+        }
+      },
+      "confusion_matrix": [
+        [
+          36,
+          2,
+          3
+        ],
+        [
+          7,
+          8,
+          3
+        ],
+        [
+          1,
+          2,
+          38
+        ]
+      ],
+      "fit_seconds": 1.91,
+      "predict_ms_per_doc": 0.0086
+    }
+  ],
+  "winner": "lr",
+  "winner_reason": "macro-F1 cross-validation (5-fold) tertinggi pada data latih",
+  "vocab_size": 2266,
+  "top_terms": {
+    "negative": [
+      {
+        "term": "tidak",
+        "weight": 8.0498
+      },
+      {
+        "term": "kecewa",
+        "weight": 7.061
+      },
+      {
+        "term": "saja",
+        "weight": 2.63
+      },
+      {
+        "term": "tapi",
+        "weight": 2.5943
+      },
+      {
+        "term": "jelek",
+        "weight": 2.5256
+      },
+      {
+        "term": "mahal",
+        "weight": 2.1361
+      },
+      {
+        "term": "pop",
+        "weight": 2.0312
+      },
+      {
+        "term": "payah",
+        "weight": 1.9324
+      },
+      {
+        "term": "sinetron",
+        "weight": 1.931
+      },
+      {
+        "term": "pelanggan",
+        "weight": 1.8832
+      }
+    ],
+    "neutral": [
+      {
+        "term": "bogor",
+        "weight": 2.8836
+      },
+      {
+        "term": "baiknya",
+        "weight": 2.6768
+      },
+      {
+        "term": "hari",
+        "weight": 2.5335
+      },
+      {
+        "term": "informasi",
+        "weight": 2.2905
+      },
+      {
+        "term": "banyak",
+        "weight": 2.0727
+      },
+      {
+        "term": "lombok",
+        "weight": 1.9723
+      },
+      {
+        "term": "towel",
+        "weight": 1.9561
+      },
+      {
+        "term": "cawapres",
+        "weight": 1.8874
+      },
+      {
+        "term": "rusa",
+        "weight": 1.863
+      },
+      {
+        "term": "salah",
+        "weight": 1.8241
+      }
+    ],
+    "positive": [
+      {
+        "term": "banget",
+        "weight": 4.0579
+      },
+      {
+        "term": "mantap",
+        "weight": 3.8547
+      },
+      {
+        "term": "selalu",
+        "weight": 3.5252
+      },
+      {
+        "term": "senang",
+        "weight": 3.4294
+      },
+      {
+        "term": "keren",
+        "weight": 3.2476
+      },
+      {
+        "term": "enak",
+        "weight": 2.8735
+      },
+      {
+        "term": "bandung",
+        "weight": 2.6058
+      },
+      {
+        "term": "semoga",
+        "weight": 2.4976
+      },
+      {
+        "term": "salut",
+        "weight": 2.2876
+      },
+      {
+        "term": "lebih",
+        "weight": 2.277
+      }
+    ]
+  }
+}
