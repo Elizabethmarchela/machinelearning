@@ -231,6 +231,8 @@ def main():
         f"(CV macro-F1 {best['cv_f1_macro']:.4f}, test macro-F1 {best['test']['f1_macro']:.4f})")
 
     W, vec = export_model(best["key"], best["name"], estimators[best["key"]], args.out / "model.json")
+    for r in results:
+        export_model(r["key"], r["name"], estimators[r["key"]], args.out / f"model_{r['key']}.json")
 
     metrics = {
         "settings": {"seed": SEED, "test_size": TEST_SIZE, "cv_folds": CV_FOLDS, "scoring": "f1_macro"},
