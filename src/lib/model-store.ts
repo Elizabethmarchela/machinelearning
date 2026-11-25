@@ -21,6 +21,28 @@ export function getClassifier(): Classifier | null {
   }
 }
 
+const ALL_KEYS = ["mnb", "svm", "lr"] as const;
+const allCache: Record<string, { mtime: number; clf: Classifier; name: string }> = {};
+
+export function getAllClassifiers() {
+  const winner = getMetrics()?.winner;
+  const out: { key: string; name: string; clf: Classifier; isBest: boolean }[] = [];
+  for (const key of ALL_KEYS) {
+    const file = path.join(MODEL_DIR, `model_${key}.json`);
+    try {
+      const mtime = fs.statSync(file).mtimeMs;
+      if (!allCache[key] || allCache[key].mtime !== mtime) {
+        const model = JSON.parse(fs.readFileSync(file, "utf8")) as ModelFile;
+        allCache[key] = { mtime, clf: createClassifier(model), name: model.model_name };
+      }
+      out.push({ key, name: allCache[key].name, clf: allCache[key].clf, isBest: key === winner });
+    } catch {
+      return null;
+    }
+  }
+  return out;
+}
+
 export interface ModelResult {
   key: string;
   name: string;

@@ -86,8 +86,8 @@
           39
         ]
       ],
-      "fit_seconds": 1.73,
-      "predict_ms_per_doc": 0.0135
+      "fit_seconds": 1.81,
+      "predict_ms_per_doc": 0.0138
     },
     {
       "key": "svm",
@@ -148,8 +148,8 @@
           40
         ]
       ],
-      "fit_seconds": 0.92,
-      "predict_ms_per_doc": 0.0082
+      "fit_seconds": 0.87,
+      "predict_ms_per_doc": 0.0084
     },
     {
       "key": "lr",
@@ -210,8 +210,8 @@
           38
         ]
       ],
-      "fit_seconds": 1.91,
-      "predict_ms_per_doc": 0.0086
+      "fit_seconds": 1.89,
+      "predict_ms_per_doc": 0.0102
     }
   ],
   "winner": "lr",

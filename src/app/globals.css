@@ -109,3 +109,33 @@ tr.win td { background: #dcfce7; font-weight: 600; }
 .cm { border-collapse: separate; border-spacing: 3px; width: auto; margin-top: 6px; }
 .cm td, .cm th { text-align: center; padding: 8px 10px; border: none; }
 .cm th { font-size: 11px; }
+
+.model-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px 0 24px;
+  max-width: 320px;
+}
+
+.model-selector label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.model-selector select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background-color: white;
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+}
+
+.model-selector select:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
