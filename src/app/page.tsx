@@ -31,7 +31,7 @@ const MODELS = [
 
 export default function Home() {
   const [text, setText] = useState("");
-  const [selectedModel, setSelectedModel] = useState("lr");
+  const [selectedModel, setSelectedModel] = useState("svm");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<Prediction | null>(null);
@@ -67,7 +67,7 @@ export default function Home() {
       }
 
       setAllResults(rows);
-      setResult(data.prediction as Prediction);
+      setResult(selected.prediction);
 
     } catch (e) {
       setResult(null);
